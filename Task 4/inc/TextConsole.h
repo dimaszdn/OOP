@@ -96,6 +96,13 @@ namespace consUtils
             this->reset();
         }
 
+        void clear()
+        {
+            int size = m_str.size();
+            m_str.clear();
+            m_str.append(size, ' ');
+        }
+
         Point getPosition()
         {
             return m_point;

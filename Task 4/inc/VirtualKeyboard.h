@@ -24,6 +24,8 @@ private:
     Point pointLTop{2, 2};
     Point pointLBottom{2, 8};
 
+    bool undo = 0;
+
 public:
     ~Keyboard()
     {
@@ -36,12 +38,13 @@ public:
 
     void pressKey(const std::string& keyName)
     {
-        if (this->searchKey(keyName) == -1)
+        int indexKey = this->searchKey(keyName);
+        if (indexKey == -1)
             throw std::logic_error("There is no such button!");
         else
         {
-            keys[this->searchKey(keyName)]->Execute(command, action); //вызов нужной кнопки
-            this->status();
+            keys[indexKey]->Execute(command, action); //вызов нужной кнопки
+            this->status(indexKey);
         }
     }
 
@@ -57,10 +60,23 @@ public:
 
     void Undo()
     {
-        command = "Undo";
+        textCommand.setStr("Undo");
+        textCommand.setPosition(pointRTop);
+        textCommand.print();
+        pointRTop.shiftY(1);
 
-        action = "";
-
+        textAction.clear();
+        if (textAction.getPosition().m_x != pointLTop.m_x - 2)
+        {
+            pointLTop.shiftY(-1);
+            textAction.setPosition(pointLTop);
+        }
+        else
+        {
+            pointLBottom.shiftX(-2);
+            textAction.setPosition(pointLBottom);
+        }
+        textAction.print();
 //        //Распечатали команду отмены
 //        command = "Undo";
 //        textCommand.setStr(command);
@@ -80,7 +96,7 @@ public:
 //            pointLTop.shiftX(-2);
 //            textAction.setPosition(pointLTop);
 //        }
-//        textAction.print();
+//        textAction.print
 
     }
 
@@ -93,6 +109,38 @@ private:
         return -1;
     }
 
+    void status(int indexKey)
+    {
+        textCommand.setStr(command);
+        textAction.setStr(action);
+        if (keys[indexKey]->getCommand() == CommandType::KeyCharCommand)
+        {
+            textCommand.setPosition(pointRTop);
+            textCommand.print();
+
+            textAction.setPosition(pointLTop);
+            textAction.print();
+
+            pointRTop.shiftY(1); //перевели сразу возможную команду на новую строку
+            pointLTop.shiftX(2); //передвинули клавишу нажатую
+        }
+        else
+        {
+            textCommand.setPosition(pointRTop);
+            textCommand.print();
+
+            textAction.setPosition(pointLBottom);
+            textAction.print();
+
+            pointRTop.shiftY(1);
+            pointLBottom.shiftY(1);
+        }
+        if (undo)
+        {
+
+        }
+    }
+    /*
     void status()
     {
         textCommand.setStr(command);
@@ -119,7 +167,7 @@ private:
             pointRTop.shiftX(1);
             pointLBottom.shiftY(1);
         }
-    }
+    }*/
 };
 
 void drawSplit()

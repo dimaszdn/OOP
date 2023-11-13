@@ -26,6 +26,8 @@ public:
         m_command->Execute(command, action, m_keyName);
     }
 
+    CommandType getCommand() { return m_command->getCommandType(); }
+
     const std::string& getKeyName() { return m_keyName; }
 
 };
