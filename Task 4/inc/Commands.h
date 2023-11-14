@@ -37,7 +37,7 @@ public:
     }
 };
 
-class AltShiftCommand : public ICommand
+class CapsLockCommand : public ICommand
 {
 public:
 

@@ -5,17 +5,13 @@
 #include<thread>
 
 /*
- * подумать как сделать так, чтобы:
- *  вывело сначала "а" например
- *  потом рядом "b"
- *  возможно для этого уже нужно продумать работу класса keyboard
-
-   Undo - отменяет последнюю кнопку?
+    сделать ребинд клавиш
+    добавить ещё одну новую команду
  */
 
 using namespace consUtils;
 
-const int SLEEP_TIME = 3000;
+const int SLEEP_TIME = 2800;
 
 int main()
 {
@@ -25,6 +21,7 @@ int main()
     auto* keyS = new Key("S", new KeyCharCommand());
     auto* keyA = new Key("A", new KeyCharCommand());
     auto* keyD = new Key("D", new KeyCharCommand());
+    auto* keyF1 = new Key("F1", new KeyCharCommand());
     auto keyFnC = new Key("Fn + C", new CalcCommand());
 
     Keyboard keyboard;
@@ -33,6 +30,7 @@ int main()
     keyboard.addKey(keyA);
     keyboard.addKey(keyD);
     keyboard.addKey(keyFnC);
+    keyboard.addKey(keyF1);
 
     try
     {
@@ -46,6 +44,12 @@ int main()
         std::this_thread::sleep_for(std::chrono::milliseconds(SLEEP_TIME));
 
         keyboard.pressKey("D");
+        std::this_thread::sleep_for(std::chrono::milliseconds(SLEEP_TIME));
+
+        keyboard.Undo();
+        std::this_thread::sleep_for(std::chrono::milliseconds(SLEEP_TIME));
+
+        keyboard.pressKey("F1");
         std::this_thread::sleep_for(std::chrono::milliseconds(SLEEP_TIME));
 
         keyboard.pressKey("Fn + C");

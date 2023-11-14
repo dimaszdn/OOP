@@ -24,7 +24,8 @@ private:
     Point pointLTop{2, 2};
     Point pointLBottom{2, 8};
 
-    bool undo = 0;
+    int lastPressKey;
+    bool capsLock = false;
 
 public:
     ~Keyboard()
@@ -38,13 +39,13 @@ public:
 
     void pressKey(const std::string& keyName)
     {
-        int indexKey = this->searchKey(keyName);
-        if (indexKey == -1)
+        lastPressKey = this->searchKey(keyName);
+        if (lastPressKey == -1)
             throw std::logic_error("There is no such button!");
         else
         {
-            keys[indexKey]->Execute(command, action); //вызов нужной кнопки
-            this->status(indexKey);
+            keys[lastPressKey]->Execute(command, action); //вызов нужной кнопки
+            this->status();
         }
     }
 
@@ -60,44 +61,20 @@ public:
 
     void Undo()
     {
-        textCommand.setStr("Undo");
-        textCommand.setPosition(pointRTop);
-        textCommand.print();
-        pointRTop.shiftY(1);
+        //Изменили command и зачистили action
+        command = "Undo";
 
-        textAction.clear();
-        if (textAction.getPosition().m_x != pointLTop.m_x - 2)
-        {
-            pointLTop.shiftY(-1);
-            textAction.setPosition(pointLTop);
-        }
+        action.clear();
+        action.append(action.capacity(), ' ');
+
+        //Сместили курсоры обратно в нужные позиции
+        if (keys[lastPressKey]->getCommand() == CommandType::KeyCharCommand)
+            pointLTop.shiftX(-2);
         else
-        {
-            pointLBottom.shiftX(-2);
-            textAction.setPosition(pointLBottom);
-        }
-        textAction.print();
-//        //Распечатали команду отмены
-//        command = "Undo";
-//        textCommand.setStr(command);
-//        textCommand.setPosition(pointRTop);
-//        pointRTop.shiftY(1);
-//
-//        //Убираем последнее выведенное действие
-//        action = "";
-//        textAction.setStr(action);
-//        if (action.size() > 1)
-//        {
-//            pointLBottom.shiftY(-1);
-//            textAction.setPosition(pointLBottom);
-//        }
-//        else
-//        {
-//            pointLTop.shiftX(-2);
-//            textAction.setPosition(pointLTop);
-//        }
-//        textAction.print
+            pointLBottom.shiftY(-1);
 
+        //Вызвали статус клавиатуры
+        this->status();
     }
 
 private:
@@ -109,65 +86,32 @@ private:
         return -1;
     }
 
-    void status(int indexKey)
-    {
-        textCommand.setStr(command);
-        textAction.setStr(action);
-        if (keys[indexKey]->getCommand() == CommandType::KeyCharCommand)
-        {
-            textCommand.setPosition(pointRTop);
-            textCommand.print();
-
-            textAction.setPosition(pointLTop);
-            textAction.print();
-
-            pointRTop.shiftY(1); //перевели сразу возможную команду на новую строку
-            pointLTop.shiftX(2); //передвинули клавишу нажатую
-        }
-        else
-        {
-            textCommand.setPosition(pointRTop);
-            textCommand.print();
-
-            textAction.setPosition(pointLBottom);
-            textAction.print();
-
-            pointRTop.shiftY(1);
-            pointLBottom.shiftY(1);
-        }
-        if (undo)
-        {
-
-        }
-    }
-    /*
     void status()
     {
+        //установка тексту строк
         textCommand.setStr(command);
         textAction.setStr(action);
-        if (command.find("Pressed") != std::string::npos)
+
+        //выводим команду
+        textCommand.setPosition(pointRTop);
+        textCommand.print();
+        pointRTop.shiftY(1);
+
+        //выводим действие
+        if (keys[lastPressKey]->getCommand() == CommandType::KeyCharCommand)
         {
-            textCommand.setPosition(pointRTop);
-            textCommand.print();
-
             textAction.setPosition(pointLTop);
-            textAction.print();
-
-            pointRTop.shiftY(1); //перевели сразу возможную команду на новую строку
-            pointLTop.shiftX(2); //передвинули клавишу нажатую
+            if (command != "Undo")
+                pointLTop.shiftX(2);
         }
         else
         {
-            textCommand.setPosition(pointRTop);
-            textCommand.print();
-
             textAction.setPosition(pointLBottom);
-            textAction.print();
-
-            pointRTop.shiftX(1);
-            pointLBottom.shiftY(1);
+            if (command != "Undo")
+                pointLBottom.shiftY(1);
         }
-    }*/
+        textAction.print();
+    }
 };
 
 void drawSplit()

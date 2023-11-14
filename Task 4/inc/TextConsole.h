@@ -47,30 +47,6 @@ namespace consUtils
         const short m_colWindow = 120;
 
     public:
-        void setPosition(Position position) //через перечисления
-        {
-            switch(position)
-            {
-                case Position::LeftBottom:
-                    m_point = {2, static_cast<short>((m_rowWindow - 10))};
-                    break;
-
-                case Position::RightBottom:
-                    m_point = {static_cast<short>((m_colWindow / 2 + 10)), static_cast<short>((m_rowWindow - 10))};
-                    break;
-
-                case Position::LeftTop:
-                    m_point = {2, 2};
-                    break;
-
-                case Position::RightTop:
-                    m_point = {static_cast<short>((m_colWindow / 2 + 10)), 2};
-                    break;
-            }
-
-            this->setCursorPos({m_point.m_x, m_point.m_y});
-        }
-
         void setPosition(Point point) //через задание координат
         {
             m_point = {point.m_x, point.m_y};
@@ -94,13 +70,6 @@ namespace consUtils
         {
             std::cout << m_str;
             this->reset();
-        }
-
-        void clear()
-        {
-            int size = m_str.size();
-            m_str.clear();
-            m_str.append(size, ' ');
         }
 
         Point getPosition()
