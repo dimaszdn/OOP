@@ -5,12 +5,14 @@ enum class CommandType
 {
     KeyCharCommand,
     CalcCommand,
+    CapsLockCommand
 };
 
 class ICommand
 {
 protected:
     CommandType m_commandType;
+
 public:
     virtual void Execute(std::string& command, std::string& action, const std::string& keyName) = 0;
     virtual ~ICommand() = default;
@@ -40,16 +42,21 @@ public:
 class CapsLockCommand : public ICommand
 {
 public:
-
+    void Execute(std::string& command, std::string& action, const std::string& keyName) override
+    {
+        this->setCommandType(CommandType::CapsLockCommand);
+        command = keyName;
+        action = "Register changed";
+    }
 };
 
-class CalcCommand : public ICommand //калькулятор открывается
+class CalcCommand : public ICommand
 {
 public:
     void Execute(std::string& command, std::string& action, const std::string& keyName) override
     {
         this->setCommandType(CommandType::CalcCommand);
-        command = "Fn + C";
+        command = keyName;
         action = "Calculator is open";
     }
 };

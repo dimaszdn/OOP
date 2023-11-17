@@ -17,14 +17,6 @@ namespace consUtils
         PINK = 13,
     };
 
-    enum class Position
-    {
-        LeftBottom,
-        RightBottom,
-        LeftTop,
-        RightTop
-    };
-
     struct Point
     {
         short m_x;
@@ -43,19 +35,11 @@ namespace consUtils
         Point m_point{0, 0};
         std::string m_str;
 
-        const short m_rowWindow = 30;
-        const short m_colWindow = 120;
-
     public:
-        void setPosition(Point point) //через задание координат
+        void setPosition(Point point)
         {
             m_point = {point.m_x, point.m_y};
             this->setCursorPos({m_point.m_x, m_point.m_y});
-        }
-
-        void setCursorPos(Point point)
-        {
-            SetConsoleCursorPosition(hStdOut, {point.m_x, point.m_y});
         }
 
         void setColor(Color color)
@@ -82,6 +66,11 @@ namespace consUtils
         {
             this->setCursorPos({0, 0});
             this->setColor(Color::DEFAULT);
+        }
+
+        void setCursorPos(Point point)
+        {
+            SetConsoleCursorPosition(hStdOut, {point.m_x, point.m_y});
         }
     };
 }

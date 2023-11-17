@@ -1,13 +1,9 @@
 #pragma once
 
+#include<Global.h>
 #include<TextConsole.h>
 #include<Key.h>
 #include<vector>
-
-/*
- * После того как всё будет сделано, поменять
- * значения в виде чисел на переменные
- */
 
 using namespace consUtils;
 
@@ -20,7 +16,7 @@ private:
     TextConsole textAction;
     TextConsole textCommand;
 
-    Point pointRTop{120 / 2 + 10, 2};
+    Point pointRTop{windowCol / 2 + 10, 2};
     Point pointLTop{2, 2};
     Point pointLBottom{2, 8};
 
@@ -54,9 +50,9 @@ public:
         keys.push_back(key);
     }
 
-    void rebindKey()
+    void rebindKey(const std::string& key, ICommand* newCommand)
     {
-
+        keys[this->searchKey(key)]->setCommand(newCommand);
     }
 
     void Undo()
@@ -64,12 +60,12 @@ public:
         //Изменили command и зачистили action
         command = "Undo";
 
-        action.clear();
-        action.append(action.capacity(), ' ');
+        for (int i = 0; i < action.size(); ++i)
+            action[i] = ' ';
 
         //Сместили курсоры обратно в нужные позиции
         if (keys[lastPressKey]->getCommand() == CommandType::KeyCharCommand)
-            pointLTop.shiftX(-2);
+            pointLTop.shiftX(static_cast<short>(-(1 + action.size())));
         else
             pointLBottom.shiftY(-1);
 
@@ -88,8 +84,12 @@ private:
 
     void status()
     {
-        //установка тексту строк
+        //передаем action и command в предназначенные им тексты и проверяем нажат ли Caps Lock
         textCommand.setStr(command);
+
+        this->setCapsLock();
+        if (this->checkCapsLockPressed() && action.size() == 1)
+            action[0] = static_cast<char>(std::toupper(action[0]));
         textAction.setStr(action);
 
         //выводим команду
@@ -102,7 +102,7 @@ private:
         {
             textAction.setPosition(pointLTop);
             if (command != "Undo")
-                pointLTop.shiftX(2);
+                pointLTop.shiftX(static_cast<short>(action.size() + 1));
         }
         else
         {
@@ -112,22 +112,17 @@ private:
         }
         textAction.print();
     }
-};
 
-void drawSplit()
-{
-    TextConsole splitCol;
-    TextConsole splitRow;
-    splitRow.setStr("-");
-    splitCol.setStr("|");
-    for (short i = 0; i < 30; i++)
+    [[nodiscard]] bool checkCapsLockPressed() const { return capsLock; }
+
+    void setCapsLock()
     {
-        splitCol.setPosition({120 / 2, i});
-        splitCol.print();
+        if (keys[lastPressKey]->getCommand() == CommandType::CapsLockCommand)
+        {
+            if (!capsLock)
+                capsLock = true;
+            else
+                capsLock = false;
+        }
     }
-    for (short i = 0; i < 120 / 2; ++i)
-    {
-        splitRow.setPosition({i, 5});
-        splitRow.print();
-    }
-}
+};

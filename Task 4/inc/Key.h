@@ -12,12 +12,10 @@ private:
 public:
     Key(const std::string& keyName, ICommand* command) : m_keyName{keyName},
         m_command{command}
-    {
-//        std::cout << "Key constr" << "\n";
-    }
+    {}
+
     ~Key()
     {
-//        std::cout << "Key destr" << "\n";
         delete m_command;
     }
 
@@ -26,8 +24,12 @@ public:
         m_command->Execute(command, action, m_keyName);
     }
 
+    void setCommand(ICommand* command)
+    {
+        m_command = command;
+    }
+
     CommandType getCommand() { return m_command->getCommandType(); }
 
     const std::string& getKeyName() { return m_keyName; }
-
 };

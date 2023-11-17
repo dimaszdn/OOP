@@ -8,4 +8,4 @@ add_executable(Task_4 main.cpp
                inc/TextConsole.h
                inc/VirtualKeyboard.h
                inc/Commands.h
-               inc/Key.h)
+               inc/Key.h inc/Global.h)
