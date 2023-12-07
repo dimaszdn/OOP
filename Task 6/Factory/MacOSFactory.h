@@ -4,6 +4,7 @@
 #include<MacOSTextBox.h>
 #include<MacOSButton.h>
 #include<MacOSForm.h>
+#include<MacOsScrollBar.h>
 
 class MacOSFactory : public Factory
 {
@@ -19,5 +20,9 @@ public:
     Button* createButton(const std::string& buttonName, Position pos) override
     {
         return new MacOSButton(buttonName, pos);
+    }
+    ScrollBar* createScrollBar(Orientation orientation, Position pos) override
+    {
+        return new MacOsScrollBar(orientation, pos);
     }
 };

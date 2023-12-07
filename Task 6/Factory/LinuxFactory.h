@@ -4,6 +4,7 @@
 #include<LinuxForm.h>
 #include<LinuxButton.h>
 #include<LinuxTextBox.h>
+#include<LinuxScrollBar.h>
 
 class LinuxFactory : public Factory
 {
@@ -19,5 +20,9 @@ public:
     Button* createButton(const std::string& buttonName, Position pos) override
     {
         return new LinuxButton(buttonName, pos);
+    }
+    ScrollBar* createScrollBar(Orientation orientation, Position pos) override
+    {
+        return new LinuxScrollBar(orientation, pos);
     }
 };

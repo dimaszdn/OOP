@@ -4,15 +4,13 @@
 #include<MacOSFactory.h>
 #include<OS.h>
 
-//Добавить ещё один control и на этом всё
-
 int main()
 {
     setlocale(LC_ALL, "RUS");
 
-    Factory* factory = nullptr;
-    Form* form = nullptr;
-    OS systemType = OS::MacOs;
+    Factory* factory;
+    Form* form;
+    OS systemType = OS::Linux;
     switch (systemType)
     {
         case OS::Windows:
@@ -28,8 +26,8 @@ int main()
     form = factory->createForm({4, 4});
     form->addControl(factory->createButton("Enter", {10, 10}));
     form->addControl(factory->createButton("Esc", {12, 12}));
-    form->addControl(factory->createTextBox("Let's", {5, 5}));
-    form->addControl(factory->createTextBox("Go", {20, 20}));
+    form->addControl(factory->createTextBox("Text", {5, 5}));
+    form->addControl(factory->createScrollBar(Orientation::Horizontal, {0, 0}));
 
     for (auto* control : form->controls)
     {
@@ -38,6 +36,8 @@ int main()
             button->press();
         else if (auto* textBox = dynamic_cast<TextBox*>(control))
             textBox->print();
+        else if (auto* scrollBar = dynamic_cast<ScrollBar*>(control))
+            scrollBar->move();
     }
 
     delete factory;
