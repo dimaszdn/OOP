@@ -34,7 +34,7 @@ int main()
     try
     {
 //        test1(7, points4, L, R, C);
-        test2(7, 0.111111, L, R, C);
+        test2(7, 0.0324, L, R, C);
     }
     catch (std::out_of_range& ex)
     {

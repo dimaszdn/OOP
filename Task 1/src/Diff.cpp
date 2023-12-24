@@ -2,8 +2,8 @@
 
 void Diff::setDx(double dx)
 {
-    if (dx == 0)
-        throw std::logic_error("dx is zero!");
+    if (dx <= 0)
+        throw std::logic_error("dx is zero or negative!");
     m_dx = dx;
 }
 
