@@ -39,6 +39,12 @@ void workFlow1(Keyboard& keyboard)
     keyboard.pressKey("Shift");
     std::this_thread::sleep_for(std::chrono::milliseconds(SLEEP_TIME));
 
+    keyboard.Undo();
+    std::this_thread::sleep_for(std::chrono::milliseconds(SLEEP_TIME));
+
+    keyboard.pressKey("Esc");
+    std::this_thread::sleep_for(std::chrono::milliseconds(SLEEP_TIME));
+
     keyboard.pressKey("Fn + C");
     std::this_thread::sleep_for(std::chrono::milliseconds(SLEEP_TIME));
 
@@ -60,6 +66,9 @@ void workFlow2(Keyboard& keyboard)
 
     keyboard.pressKey("Caps Lock");
     std::this_thread::sleep_for(std::chrono::milliseconds(SLEEP_TIME));
+
+    keyboard.Undo();
+    std::this_thread::sleep_for(std::chrono::milliseconds(SLEEP_TIME));
 }
 
 int main()
@@ -68,7 +77,7 @@ int main()
 
     auto* keyW = new Key("W", new KeyCharCommand());
     auto* keyS = new Key("s", new KeyCharCommand());
-    auto* keyD = new Key("D", new KeyCharCommand());
+    auto* keyEsc = new Key("Esc", new KeyCharCommand());
     auto* keyE = new Key("e", new KeyCharCommand());
     auto* keyFnC = new Key("Fn + C", new CalcCommand());
     auto* keyCaps = new Key("Caps Lock", new CapsLockCommand());
@@ -77,7 +86,7 @@ int main()
     Keyboard keyboard;
     keyboard.addKey(keyW);
     keyboard.addKey(keyS);
-    keyboard.addKey(keyD);
+    keyboard.addKey(keyEsc);
     keyboard.addKey(keyE);
     keyboard.addKey(keyFnC);
     keyboard.addKey(keyCaps);

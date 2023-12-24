@@ -7,6 +7,7 @@ class Key
 {
 private:
     std::string m_keyName;
+    std::string m_action;
     ICommand* m_command;
 
 public:
@@ -19,9 +20,9 @@ public:
         delete m_command;
     }
 
-    void Execute(std::string& command, std::string& action)
+    void Execute()
     {
-        m_command->Execute(command, action, m_keyName);
+        m_command->Execute(m_action, m_keyName);
     }
 
     void setCommand(ICommand* command)
@@ -29,7 +30,9 @@ public:
         m_command = command;
     }
 
-    CommandType getCommand() { return m_command->getCommandType(); }
+    ICommand* getCommand() { return m_command; }
 
     const std::string& getKeyName() { return m_keyName; }
+
+    const std::string& getAction() { return m_action; }
 };

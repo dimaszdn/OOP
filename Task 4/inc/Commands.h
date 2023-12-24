@@ -14,8 +14,9 @@ protected:
     CommandType m_commandType;
 
 public:
-    virtual void Execute(std::string& command, std::string& action, const std::string& keyName) = 0;
     virtual ~ICommand() = default;
+    virtual void Execute(std::string& action, const std::string& keyName) = 0;
+    virtual void Undo() = 0;
 
     CommandType getCommandType()
     {
@@ -31,32 +32,43 @@ public:
 class KeyCharCommand : public ICommand
 {
 public:
-    void Execute(std::string& command, std::string& action, const std::string& keyName) override
+    void Execute(std::string& action, const std::string& keyName) override
     {
         this->setCommandType(CommandType::KeyCharCommand);
-        command = "Pressed " + keyName;
         action = keyName;
+    }
+    void Undo() override
+    {
+        int maxLenNameKey = 20;
+        for (int i = 0; i < maxLenNameKey; ++i)
+            std::cout << " ";
     }
 };
 
 class CapsLockCommand : public ICommand
 {
 public:
-    void Execute(std::string& command, std::string& action, const std::string& keyName) override
+    void Execute(std::string& action, const std::string& keyName) override
     {
         this->setCommandType(CommandType::CapsLockCommand);
-        command = keyName;
         action = "Register changed";
+    }
+    void Undo() override
+    {
+        std::cout << "[UNDO] Register changed";
     }
 };
 
 class CalcCommand : public ICommand
 {
 public:
-    void Execute(std::string& command, std::string& action, const std::string& keyName) override
+    void Execute(std::string& action, const std::string& keyName) override
     {
         this->setCommandType(CommandType::CalcCommand);
-        command = keyName;
         action = "Calculator is open";
+    }
+    void Undo() override
+    {
+        std::cout << "[UNDO] Calculator is open";
     }
 };
